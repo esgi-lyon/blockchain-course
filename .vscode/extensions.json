@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "JuanBlanco.solidity",
+        "tintinweb.vscode-ethover",
+        "hosho.solidity-debugger",
+        "esbenp.prettier-vscode",
+        "trufflesuite-csi.truffle-vscode"
+    ]
+}

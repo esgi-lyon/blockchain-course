@@ -4,6 +4,16 @@
 - [Crypto zombie solidity learn](https://cryptozombies.io/)
 - [online solidity IDE](https://remix.ethereum.org/)
 
+
+## Tools Installation 
+
+- `npm i`
+- `brew install --cask ganache`
+
+> Optional
+- setup `https://github.com/roynalnaruto/svm-rs`
+- `svm install 0.8.16 && svm use 0.8.16`
+
 # Lesson 
 
 ## Protocole Bitcoin : 
@@ -35,3 +45,5 @@ ERC 1155 solves all the major issues of ERC 20 and ERC 721 — the former best t
 ![erc-list](doc/erc-list.jpeg)
 
 EIP-5114: Soulbound Badge :  immutable token holder / non transferable (identity, graduation…)
+
+[**All implementation examples**](https://github.com/OpenZeppelin/openzeppelin-contracts/tree/master/contracts)

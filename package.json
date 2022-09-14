@@ -1,0 +1,27 @@
+{
+  "name": "tutorialtoken",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "dev": "lite-server",
+    "compile": "truffle compile",
+    "deploy:ropsten": "truffle deploy --network ropsten",
+    "deploy:ropsten:console": "truffle console --network ropsten",
+    "deploy:test": "npx truffle deploy --network development",
+    "test": "truffle compile && npm run deploy:test && npx truffle test"
+  },
+  "author": "Loic Roux",
+  "license": "ISC",
+  "devDependencies": {
+    "lite-server": "^2.3.0"
+  },
+  "dependencies": {
+    "openzeppelin-solidity": "^4.6.0",
+    "truffle": "^5.5.30",
+    "truffle-hdwallet-provider": "^1.0.17"
+  }
+}
