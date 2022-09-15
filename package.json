@@ -1,5 +1,5 @@
 {
-  "name": "tutorialtoken",
+  "name": "blockhain-course",
   "version": "1.0.0",
   "description": "",
   "main": "truffle.js",
@@ -10,16 +10,22 @@
     "dev": "lite-server",
     "compile": "truffle compile",
     "deploy:ropsten": "truffle deploy --network ropsten",
-    "deploy:ropsten:console": "truffle console --network ropsten",
+    "deploy:ropsten:overwrite": "npm run deploy:ropsten --reset --compile-all",
+    "verify:ropsten": "truffle run verify --network ropsten",
+    "console:ropsten": "truffle console --network ropsten",
     "deploy:test": "npx truffle deploy --network development",
-    "test": "truffle compile && npm run deploy:test && npx truffle test"
+    "test": "npm run deploy:test && npx truffle test"
   },
   "author": "Loic Roux",
   "license": "ISC",
   "devDependencies": {
-    "lite-server": "^2.3.0"
+    "ganache-cli": "^6.12.2",
+    "ganache-core": "^2.13.2",
+    "lite-server": "^2.3.0",
+    "truffle-plugin-verify": "^0.5.28"
   },
   "dependencies": {
+    "ganache": "^7.4.3",
     "openzeppelin-solidity": "^4.6.0",
     "truffle": "^5.5.30",
     "truffle-hdwallet-provider": "^1.0.17"

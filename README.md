@@ -14,6 +14,16 @@
 - setup `https://github.com/roynalnaruto/svm-rs`
 - `svm install 0.8.16 && svm use 0.8.16`
 
+
+## Try contract
+
+- `npx truffle console`
+```js
+let instance = await MyPrivateLocation.deployed();
+instance.setLocation(45777144, 4791939);
+instance.getLocation(accounts[0]);
+```
+
 # Lesson 
 
 ## Protocole Bitcoin : 

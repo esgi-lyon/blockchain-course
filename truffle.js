@@ -1,6 +1,6 @@
 
 var HDWalletProvider = require("truffle-hdwallet-provider");
-const { mnemonic, token } = require("./.env.json")
+const { mnemonic, token, etherscan } = require("./.env.json")
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // for more about customizing your Truffle configuration!
@@ -33,4 +33,8 @@ module.exports = {
       version: "^0.8.17",
     },
   },
+  plugins: ['truffle-plugin-verify'],
+  api_keys: {
+    etherscan
+  }
 };

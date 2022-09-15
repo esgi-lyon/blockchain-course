@@ -4,44 +4,125 @@
 pragma solidity ^0.8.17;
 
 import "openzeppelin-solidity/contracts/utils/Context.sol";
+import "openzeppelin-solidity/contracts/access/Ownable.sol";
+import "openzeppelin-solidity/contracts/utils/Counters.sol";
 
-struct Coordinate {
-    int256 lat;
-    int256 long;
-}
+contract MyPrivateLocation is Context, Ownable {
+    using Counters for Counters.Counter;
 
-contract MyPrivateLocation is Context {
-
-    uint constant decimalBase = 6;
+    uint8 constant decimalBase = 6;
 
     mapping(address => Coordinate) private _locations;
 
     mapping(address => address[]) private _allowances;
 
-    event LocationAddedFor(address inputAddress);
+    mapping(uint256 => Invitation) private _invitations;
 
-    function setLocation(int256 lat, int256 long) public {
-        Coordinate memory coords = Coordinate(
-            lat,
-            long
-        );
+    Counters.Counter private _invitationsCounter;
 
-        _locations[_msgSender()] = coords;
-         emit LocationAddedFor(_msgSender());
+    struct Coordinate {
+        int256 lat;
+        int256 long;
     }
 
-    function viewLocation(address _address) public view returns (int256 lat, int256 long) {
-        bool isAuthorized = false;
-        for (uint i = 0; i < _allowances[_address].length; i++) {
-            isAuthorized = keccak256(abi.encodePacked(_allowances[_address][i])) 
-                == keccak256(abi.encodePacked(_msgSender()));
+    event LocationAdded(address inputAddress);
 
-            if (isAuthorized) break;
+    enum InvitationState {
+        Accepted,
+        Declined
+    }
+
+    struct Invitation {
+        address from;
+        address to;
+    }
+
+    event CreatedInvitation(uint256 id, address to);
+
+    event AnsweredInvitation(uint256 id, InvitationState state);
+
+    /**
+     * Add a location
+     */
+    function setLocation(int256 lat, int256 long) public {
+        _locations[_msgSender()] = Coordinate(lat, long);
+        emit LocationAdded(_msgSender());
+    }
+
+    /**
+     * View a location
+     */
+    function getLocation(address _address)
+        external
+        view
+        returns (Coordinate memory coordinate)
+    {
+        if (_msgSender() == _address) {
+            return _locations[_address];
         }
 
-        require(isAuthorized);
+        bool isAuthorized = false;
 
-        return (_locations[_address].lat, _locations[_address].long);
+        for (uint256 i = 0; i < _allowances[_address].length; i++) {
+            isAuthorized = _msgSender() == _allowances[_address][i];
+
+            if (isAuthorized) {
+                break;
+            }
+        }
+
+        require(isAuthorized, "not authorized to consult location");
+
+        coordinate = _locations[_address];
+    }
+
+    /**
+     * Allow an user to view your location
+     */
+    function grant(address _to) public {
+        _invitationsCounter.increment();
+        _invitations[_invitationsCounter.current()] = Invitation(
+            _msgSender(),
+            _to
+        );
+
+        emit CreatedInvitation(_invitationsCounter.current(), _to);
+    }
+
+    /**
+     * Accept an user invitation to view his location
+     */
+    function accept(uint256 _invitationId, bool acceptation) public {
+
+        address _from = _invitations[_invitationId].from;
+        address _to = _invitations[_invitationId].to;
+
+        require(
+            _invitationId <= _invitationsCounter.current(),
+            "Invitation isn't available"
+        );
+
+        for (uint256 i = 0; i < _allowances[_from].length; i++) {
+            require(
+                _allowances[_from][i] != _msgSender(),
+                "Already accepted invitation"
+            );
+        }
+
+        require(
+            _to == _msgSender(),
+            "You're not granted to view this user location"
+        );
+
+        if (!acceptation) {
+            emit AnsweredInvitation(_invitationId, InvitationState.Declined);
+            return;
+        }
+
+        _allowances[_from].push(_msgSender());
+
+        emit AnsweredInvitation(_invitationId, InvitationState.Accepted);
+        delete _invitations[_invitationId];
     }
 
     /**
@@ -54,7 +135,15 @@ contract MyPrivateLocation is Context {
      * no way affects any of the arithmetic of the contract, including
      * {viewLocation} and {setLocation}.
      */
-    function decimals() pure public returns (uint8) {
-        return 6;
+    function decimals() public pure returns (uint8) {
+        return decimalBase;
     }
+
+    /**
+     * Get the last created invitation
+     */
+    function lastInvitation() private view returns (uint256) {
+        return _invitationsCounter.current();
+    }
+
 }

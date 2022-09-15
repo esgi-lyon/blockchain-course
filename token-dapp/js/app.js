@@ -37,7 +37,7 @@ App = {
   },
 
   bindEvents: function() {
-    $(document).on('click', '#transferButton', App.handleTransfer);
+    $(document).on('click', '#refresh-button', App.handleTransfer);
   },
 
   handleTransfer: function(event) {
@@ -89,7 +89,7 @@ App = {
       }).then(function(result) {
         balance = result.c[0];
 
-        $('#TTBalance').text(balance);
+        $('#location-coordinates').text(balance);
       }).catch(function(err) {
         console.log(err.message);
       });
