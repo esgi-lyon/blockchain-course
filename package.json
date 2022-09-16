@@ -14,11 +14,12 @@
     "verify:ropsten": "truffle run verify --network ropsten",
     "console:ropsten": "truffle console --network ropsten",
     "deploy:test": "npx truffle deploy --network development",
-    "test": "npm run deploy:test && npx truffle test"
+    "test": "concurrently -k \"node ganache.js\" \"npm:deploy:test && npx truffle test\""
   },
   "author": "Loic Roux",
   "license": "ISC",
   "devDependencies": {
+    "concurrently": "^7.4.0",
     "ganache-cli": "^6.12.2",
     "ganache-core": "^2.13.2",
     "lite-server": "^2.3.0",
