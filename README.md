@@ -8,9 +8,9 @@
 ## Tools Installation 
 
 - `npm i`
-- `brew install --cask ganache`
 
 > Optional
+- `brew install --cask ganache` (UI optional)
 - setup `https://github.com/roynalnaruto/svm-rs`
 - `svm install 0.8.16 && svm use 0.8.16`
 
@@ -23,6 +23,23 @@ let instance = await MyPrivateLocation.deployed();
 instance.setLocation(45777144, 4791939);
 instance.getLocation(accounts[0]);
 ```
+
+## Deploy contract
+
+> ./.env.json
+```json
+{
+  "mnemonic": "your 12 words",
+  "token": "infura token",
+  "etherscan": "etherscan api token"
+}
+
+```
+
+1. `npm run deploy goerli`
+1. `npm run verify goerli MyPrivateLocation`
+
+> Ropsten also availables
 
 # Lesson 
 

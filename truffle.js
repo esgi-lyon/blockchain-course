@@ -15,11 +15,12 @@ module.exports = {
       provider: function () {
         return new HDWalletProvider(
           mnemonic,
-          "https://eth-goerli.g.alchemy.com/v2/1QnveuDhwQJXZjqneNFO8JiI70Cz_U-g"
+          `https://goerli.infura.io/v3/${token}`
         );
       },
       network_id: 5,
-      gas: 4000000, //make sure this gas allocation isn't over 4M, which is the max
+      gas: 4465030,
+      gasPrice: 10000000000
     },
     ropsten: {
       provider: function() {
