@@ -25,8 +25,20 @@ contract("MyPrivateLocation", function (accounts) {
   it("grant location and react to event", async function () {
     const instance = await MyPrivateLocation.deployed();
 
-    const res = instance.grant(accounts[1], { from: accounts[0] })
-    console.info(res)
+    const event = instance.grant(accounts[1], { from: accounts[0] })
+    console.info(event)
+    event.watch(function(error, result){
+      if (error) { return console.log(error) }
+      if (!error) {
+        // DO ALL YOUR WORK HERE!
+        let { args: { from, to, value }, blockNumber } = result
+        console.log(`----BlockNumber (${blockNumber})----`)
+        console.log(`from = ${from}`)
+        console.log(`to = ${to}`)
+        console.log(`value = ${value}`)
+        console.log(`----BlockNumber (${blockNumber})----`)
+      }
+    })
 
   });
 
